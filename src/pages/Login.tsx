@@ -12,7 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,11 +28,11 @@ function Login() {
       // Add your actual login logic here
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       
-      // For demo purposes, accept any email/password
-      if (email && password) {
+      // For demo purposes, accept any username/password
+      if (username && password) {
         navigate('/');
       } else {
-        setError('Please enter both email and password');
+        setError('Please enter both username and password');
       }
     } catch (err) {
       setError('Login failed. Please try again.');
@@ -67,13 +67,13 @@ function Login() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               disabled={loading}
             />
             <TextField
