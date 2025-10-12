@@ -9,7 +9,7 @@ function Home() {
           Welcome to Gordon Lu's Website
         </Typography>
         <Typography variant="body1" sx={{ mb: 4 }}>
-          This is the home page of Gordon Lu's personal website, explore the gallery and contact sections to learn more
+          This is the home page of Gordon Lu's personal website, explore the gallery and contact sections to learn more!
         </Typography>
         <Box sx={{ mb: 4 }}>
           <img 
