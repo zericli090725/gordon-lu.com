@@ -177,9 +177,9 @@ export default function Gallery() {
                         }}>
                           {items.map((it, i) =>
                             it.type === "image" ? (
-                              <img key={i} src={it.url} alt="" style={{ borderRadius: 8, height: "200px", objectFit: "cover" }} />
+                              <img key={i} src={it.url} alt="" style={{ borderRadius: 8, maxHeight: "300px", width: "auto" }} />
                             ) : (
-                              <video key={i} src={it.url} controls style={{ borderRadius: 8, height: "200px" }} />
+                              <video key={i} src={it.url} controls style={{ borderRadius: 8, maxHeight: "300px", width: "auto" }} />
                             )
                           )}
                         </Box>
