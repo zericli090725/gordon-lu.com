@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  Container, Box, Typography, Card, CardMedia, CardContent,
+  Container, Box, Typography, Card, CardContent,
   Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField,
   CircularProgress, Alert
 } from "@mui/material";
@@ -148,9 +148,6 @@ export default function Gallery() {
             return (
               <Box key={card.id}>
                 <Card>
-                  {card.coverUrl && (
-                    <CardMedia component="img" image={card.coverUrl} alt={card.title} />
-                  )}
                   <CardContent>
                     <Typography variant="h6">{card.title}</Typography>
                     <Typography variant="body2" color="text.secondary">{card.summary}</Typography>
