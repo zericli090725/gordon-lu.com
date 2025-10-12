@@ -1,17 +1,21 @@
 
 
-import {Typography, Container, Box } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Gallery from './pages/Gallery';
+import Contact from './pages/Contact';
 
 function App() {
-
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 4, textAlign: 'center' }}>
-        <Typography variant="h3" component="h1" gutterBottom>
-          Hello, Gordon Lu!
-        </Typography>
-      </Box>
-    </Container>
+    <div style={{ width: '100%', minHeight: '100vh' }}>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </div>
   )
 }
 
