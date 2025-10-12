@@ -16,7 +16,7 @@ function Home() {
             src={welcomeImage} 
             alt="Welcome" 
             style={{ 
-              maxWidth: '400px', 
+              maxWidth: '300px', 
               width: '100%',
               height: 'auto',
               borderRadius: '8px',
