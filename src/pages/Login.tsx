@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { api } from '../lib/api';
 import { 
   Container, 
   Paper, 
@@ -22,20 +23,15 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    // Simulate login process
     try {
-      // Add your actual login logic here
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      
-      // For demo purposes, accept any username/password
-      if (username && password) {
-        navigate('/');
-      } else {
-        setError('Please enter both username and password');
-      }
-    } catch (err) {
-      setError('Login failed. Please try again.');
+      const res = await api<{ok:boolean; token:string}>('/api/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password })
+      });
+      localStorage.setItem('token', res.token);
+      navigate('/admin');
+    } catch (err:any) {
+      setError(err.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
