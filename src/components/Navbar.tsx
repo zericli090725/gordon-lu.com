@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
+import LoginIcon from '@mui/icons-material/Login';
 import MenuIcon from '@mui/icons-material/Menu';
 import iconImage from '../assets/icon.png';
 import { useState } from 'react';
@@ -16,7 +17,8 @@ function Navbar() {
   const navItems = [
     { label: 'Home', path: '/', icon: <HomeIcon /> },
     { label: 'Gallery', path: '/gallery', icon: <CollectionsIcon /> },
-    { label: 'Contact', path: '/contact', icon: <ContactMailIcon /> }
+    { label: 'Contact', path: '/contact', icon: <ContactMailIcon /> },
+    { label: 'Login', path: '/login', icon: <LoginIcon /> }
   ];
 
   const handleDrawerToggle = () => {
