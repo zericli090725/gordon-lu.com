@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { api } from '../lib/api';
 import { 
   Container, 
   Paper, 
@@ -23,18 +22,19 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     setError('');
-    try {
-      const res = await api<{ok:boolean; token:string}>('/api/login', {
-        method: 'POST',
-        body: JSON.stringify({ username, password })
-      });
-      localStorage.setItem('token', res.token);
+
+    // Fake login - simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Simple fake validation
+    if (username === 'admin' && password === 'password') {
+      localStorage.setItem('token', 'fake-token-123');
       navigate('/admin');
-    } catch (err:any) {
-      setError(err.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+    } else {
+      setError('Invalid username or password. Try admin/password');
     }
+    
+    setLoading(false);
   };
 
   return (
@@ -102,6 +102,10 @@ function Login() {
               {loading ? <CircularProgress size={24} /> : 'Sign In'}
             </Button>
           </Box>
+          
+          <Typography variant="body2" align="center" sx={{ mt: 2, color: 'text.secondary' }}>
+            Demo credentials: admin / password
+          </Typography>
         </Paper>
       </Box>
     </Container>
