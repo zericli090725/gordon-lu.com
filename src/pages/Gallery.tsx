@@ -136,7 +136,11 @@ export default function Gallery() {
       {!loading && !err && (
         <Box sx={{ 
           display: 'grid', 
-          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+          gridTemplateColumns: { 
+            xs: '1fr', 
+            sm: cards.some(c => content[c.id]) ? 'repeat(1, 1fr)' : 'repeat(2, 1fr)', 
+            md: cards.some(c => content[c.id]) ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)' 
+          },
           gap: 3 
         }}>
           {cards.map(card => {
@@ -153,24 +157,35 @@ export default function Gallery() {
 
                     {!items && (
                       <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-                        <Button variant="contained" onClick={() => startUnlock(card.id)}>
+                        <Button variant="contained" color="inherit" onClick={() => startUnlock(card.id)}>
                           Unlock
                         </Button>
                       </Box>
                     )}
 
                     {items && (
-                      <Box sx={{ display: "grid", gap: 1, mt: 2 }}>
-                        <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
+                      <Box sx={{ mt: 2 }}>
+                        <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
                           <Button size="small" onClick={() => clearToken(card.id)}>Lock</Button>
                         </Box>
-                        {items.map((it, i) =>
-                          it.type === "image" ? (
-                            <img key={i} src={it.url} alt="" style={{ width: "100%", borderRadius: 8 }} />
-                          ) : (
-                            <video key={i} src={it.url} controls style={{ width: "100%", borderRadius: 8 }} />
-                          )
-                        )}
+                        <Box sx={{ 
+                          display: "flex", 
+                          flexDirection: { xs: "column", sm: "row" },
+                          gap: 1,
+                          overflowX: "auto",
+                          "& > *": {
+                            minWidth: { xs: "100%", sm: "200px" },
+                            maxWidth: { xs: "100%", sm: "300px" }
+                          }
+                        }}>
+                          {items.map((it, i) =>
+                            it.type === "image" ? (
+                              <img key={i} src={it.url} alt="" style={{ borderRadius: 8, height: "200px", objectFit: "cover" }} />
+                            ) : (
+                              <video key={i} src={it.url} controls style={{ borderRadius: 8, height: "200px" }} />
+                            )
+                          )}
+                        </Box>
                       </Box>
                     )}
                   </CardContent>
@@ -194,7 +209,7 @@ export default function Gallery() {
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={() => setOpenId(null)}>Cancel</Button>
-                    <Button onClick={() => handleUnlock(card)} variant="contained" disabled={busy}>
+                    <Button onClick={() => handleUnlock(card)} variant="contained" color="inherit" disabled={busy}>
                       {busy ? "Checking..." : "Unlock"}
                     </Button>
                   </DialogActions>
