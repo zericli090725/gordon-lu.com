@@ -1,12 +1,17 @@
 
 
+import { Button, Typography, Container, Box } from '@mui/material';
 
 function App() {
 
   return (
-    <div>
-      <h1>Hello, Gordon Lu!</h1>
-    </div>
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 4, textAlign: 'center' }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Hello, Gordon Lu!
+        </Typography>
+      </Box>
+    </Container>
   )
 }
 
