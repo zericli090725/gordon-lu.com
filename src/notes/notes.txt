@@ -1,0 +1,32 @@
+Server Overview
+| Item              | Details                                                      |
+| ----------------- | ------------------------------------------------------------ |
+| **Platform**      | AWS Lightsail                                                |
+| **Instance type** | Minimal Debian + Node.js preinstalled                        |
+| **Region**        | US East (N. Virginia)                                        |
+| **Static IP**     | `44.197.130.28`                                              |
+| **Username**      | `bitnami` (default user for this image)                      |
+| **Web server**    | Nginx                                                        |
+| **Node.js**       | Installed but currently not serving (for future backend use) |
+
+Frontend
+| Item                | Details                                                         |
+| ------------------- | --------------------------------------------------------------- |
+| **Framework**       | React (built with Vite)                                         |
+| **Build folder**    | `/var/www/app`                                                  |
+| **Deployment path** | Static files served via Nginx                                   |
+| **Domain**          | [`https://gordon-lu.com`](https://gordon-lu.com)                |
+| **Cloudflare**      | Handles DNS + SSL (Flexible mode)                               |
+| **DNS records**     | `A` → `44.197.130.28` (for both `@` and `www`, orange cloud ON) |
+| **SSL/TLS mode**    | Flexible — Cloudflare serves HTTPS, server listens on HTTP:80   |
+| **Nginx root**      | `/var/www/app`                                                  |
+| **Config file**     | `/etc/nginx/sites-available/default`                            |
+| **Status**          | ✅ Live and working                                              |
+
+Deployment:
+git commit -m "Descriptive commit message"
+git push
+npm run build
+scp -i ~/.ssh/LightsailDefaultKey-us-east-1.pem -r dist/* bitnami@44.197.130.28:/var/www/app/
+ssh -i ~/.ssh/LightsailDefaultKey-us-east-1.pem bitnami@44.197.130.28 "sudo nginx -t && sudo systemctl reload nginx"
+

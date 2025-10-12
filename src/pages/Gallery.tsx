@@ -8,7 +8,7 @@ function Gallery() {
           Gallery
         </Typography>
         <Typography variant="body1" sx={{ mb: 4 }} align="center">
-          Explore Gordon Lu's interesting pictures!
+          Explore Gordon Lu's interesting pictures
         </Typography>
         
         <Box sx={{ 
