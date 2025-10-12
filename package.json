@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "git push && npm run build && scp -i ~/.ssh/LightsailDefaultKey-us-east-1.pem -r dist/* bitnami@44.197.130.28:/var/www/app/ && ssh -i ~/.ssh/LightsailDefaultKey-us-east-1.pem bitnami@44.197.130.28 'sudo nginx -t && sudo systemctl reload nginx'"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
