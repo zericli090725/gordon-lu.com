@@ -123,6 +123,9 @@ export default function Gallery() {
         <Typography color="text.secondary">
           Explore password-protected cards. Enter the password to view photos and videos.
         </Typography>
+        <Typography color="text.secondary">
+          Email zeenli720@gmail.com for passwords to specific galleries.
+        </Typography>
       </Box>
 
       {loading && (
