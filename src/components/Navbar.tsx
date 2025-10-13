@@ -21,10 +21,12 @@ function Navbar() {
   const navItems = [
     { label: 'Home', path: '/', icon: <HomeIcon /> },
     { label: 'Gallery', path: '/gallery', icon: <CollectionsIcon /> },
-    { label: 'Contact', path: '/contact', icon: <ContactMailIcon /> },
     ...(isAuthenticated 
       ? [{ label: 'Dashboard', path: '/admin', icon: <DashboardIcon /> }]
-      : [{ label: 'Login', path: '/login', icon: <LoginIcon /> }]
+      : [
+          { label: 'Contact', path: '/contact', icon: <ContactMailIcon /> },
+          { label: 'Login', path: '/login', icon: <LoginIcon /> }
+        ]
     )
   ];
 

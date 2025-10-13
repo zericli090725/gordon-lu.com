@@ -72,9 +72,12 @@ export default function Admin() {
           gridTemplateColumns: {
             xs: '1fr',
             sm: 'repeat(2, 1fr)',
-            md: 'repeat(3, 1fr)'
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(3, 1fr)',
+            xl: 'repeat(4, 1fr)'
           },
-          gap: 3
+          gap: { xs: 2, sm: 3 },
+          px: { xs: 1, sm: 0 }
         }}
       >
         {messages.map(m => (
@@ -94,13 +97,36 @@ export default function Admin() {
               }
             }}
           >
-            <CardContent sx={{ flexGrow: 1, pb: 1 }}>
-              <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', mb: 2 }}>
-                <Box>
-                  <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 0.5 }}>
+            <CardContent sx={{ flexGrow: 1, pb: 1, px: { xs: 1.5, sm: 2 } }}>
+              <Box sx={{ 
+                display:'flex', 
+                justifyContent:'space-between', 
+                alignItems:'flex-start', 
+                mb: 2,
+                flexDirection: { xs: 'column', sm: 'row' },
+                gap: { xs: 1, sm: 0 }
+              }}>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Typography 
+                    variant="h6" 
+                    component="h3" 
+                    sx={{ 
+                      fontWeight: 600, 
+                      mb: 0.5,
+                      fontSize: { xs: '1rem', sm: '1.25rem' }
+                    }}
+                  >
                     {m.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary" 
+                    sx={{ 
+                      mb: 1,
+                      fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                      wordBreak: 'break-word'
+                    }}
+                  >
                     {m.email}
                   </Typography>
                 </Box>
@@ -111,7 +137,8 @@ export default function Admin() {
                   sx={{ 
                     borderColor: '#8a8a8a',
                     color: '#8a8a8a',
-                    fontSize: '0.75rem'
+                    fontSize: { xs: '0.7rem', sm: '0.75rem' },
+                    alignSelf: { xs: 'flex-start', sm: 'flex-end' }
                   }}
                 />
               </Box>
@@ -123,14 +150,20 @@ export default function Admin() {
                 sx={{ 
                   whiteSpace:'pre-wrap',
                   lineHeight: 1.6,
-                  color: 'text.primary'
+                  color: 'text.primary',
+                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
                 }}
               >
                 {m.message}
               </Typography>
             </CardContent>
             
-            <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
+            <CardActions sx={{ 
+              justifyContent: 'flex-end', 
+              px: { xs: 1.5, sm: 2 }, 
+              pb: 2,
+              pt: 0
+            }}>
               <Button 
                 size="small" 
                 color="error" 
@@ -138,6 +171,8 @@ export default function Admin() {
                 onClick={()=>delMsg(m.id)}
                 sx={{
                   borderColor: '#d32f2f',
+                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                  minWidth: { xs: '60px', sm: 'auto' },
                   '&:hover': {
                     borderColor: '#b71c1c',
                     backgroundColor: 'rgba(211, 47, 47, 0.04)'
