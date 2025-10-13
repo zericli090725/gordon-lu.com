@@ -5,6 +5,7 @@ import CollectionsIcon from '@mui/icons-material/Collections';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import LoginIcon from '@mui/icons-material/Login';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import iconImage from '../assets/icon.png';
 import { useState } from 'react';
@@ -15,7 +16,7 @@ function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const navItems = [
     { label: 'Home', path: '/', icon: <HomeIcon /> },
@@ -29,6 +30,11 @@ function Navbar() {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = '/login';
   };
 
   const drawer = (
@@ -63,6 +69,16 @@ function Navbar() {
             </ListItemButton>
           </ListItem>
         ))}
+        {isAuthenticated && (
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogout}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -110,6 +126,20 @@ function Navbar() {
                   {item.label}
                 </Button>
               ))}
+              {isAuthenticated && (
+                <Button
+                  color="inherit"
+                  onClick={handleLogout}
+                  startIcon={<LogoutIcon />}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: 'rgba(255,255,255,0.1)'
+                    }
+                  }}
+                >
+                  Logout
+                </Button>
+              )}
             </Box>
           )}
         </Toolbar>

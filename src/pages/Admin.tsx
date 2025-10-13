@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Container, Typography, Box, Paper, Button, Alert } from '@mui/material';
-import { useAuth } from '../contexts/AuthContext';
 
 type Msg = { id:number; name:string; email:string; message:string; created_at:string };
 
 export default function Admin() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [err, setErr] = useState<string|null>(null);
-  const { logout } = useAuth();
 
   const token = localStorage.getItem('admin.token') || '';
 
@@ -44,12 +42,7 @@ export default function Admin() {
     <Container maxWidth="md" sx={{ my: 5 }}>
       <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', mb:2 }}>
         <Typography variant="h4">Messages</Typography>
-        <Box>
-          <Button onClick={load} sx={{ mr:1 }} variant="outlined">Refresh</Button>
-          <Button color="inherit" variant="outlined" onClick={()=>{ logout(); window.location.href='/login'; }}>
-            Logout
-          </Button>
-        </Box>
+        <Button onClick={load} variant="outlined">Refresh</Button>
       </Box>
       {err && <Alert severity="error" sx={{ mb:2 }}>{err}</Alert>}
       {messages.map(m => (
