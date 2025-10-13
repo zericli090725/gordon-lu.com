@@ -54,7 +54,7 @@ export default function Admin() {
   return (
     <Container maxWidth="lg" sx={{ my: 4 }}>
       <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', mb:3 }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
+        <Typography variant="h3" component="h1" gutterBottom>
           Messages
         </Typography>
         <Button 
@@ -272,9 +272,9 @@ export default function Admin() {
             flexShrink: 0
           }}>
             <Box sx={{ flexGrow: 1, pr: 2 }}>
-              <Typography variant="h5" component="h2" sx={{ fontWeight: 600, mb: 1 }}>
-                {selectedMessage?.name}
-              </Typography>
+            <Typography variant="h4" component="h2" gutterBottom>
+              {selectedMessage?.name}
+            </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                 {selectedMessage?.email}
               </Typography>
@@ -372,7 +372,9 @@ export default function Admin() {
         }}
       >
         <DialogTitle id="delete-dialog-title">
-          Confirm Delete
+          <Typography variant="h5" component="h2" gutterBottom>
+            Confirm Delete
+          </Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-dialog-description">

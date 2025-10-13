@@ -297,7 +297,11 @@ export default function Gallery() {
 
                   {/* Password dialog */}
                   <Dialog open={openId === card.id} onClose={() => setOpenId(null)}>
-                    <DialogTitle>Enter password</DialogTitle>
+                    <DialogTitle>
+                      <Typography variant="h5" component="h2" gutterBottom>
+                        Enter password
+                      </Typography>
+                    </DialogTitle>
                     <DialogContent>
                       <TextField
                         autoFocus
@@ -361,7 +365,7 @@ export default function Gallery() {
             alignItems: 'center',
             flexShrink: 0
           }}>
-            <Typography variant="h4" component="h2" sx={{ fontWeight: 600 }}>
+            <Typography variant="h4" component="h2" gutterBottom>
               {selectedCard?.title}
             </Typography>
             <IconButton
