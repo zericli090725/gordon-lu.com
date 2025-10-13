@@ -208,19 +208,12 @@ export default function Gallery() {
                             <Button size="small" onClick={() => clearToken(card.id)}>Lock</Button>
                           </Box>
                           <Box sx={{ 
-                            display: "grid",
-                            gridTemplateColumns: {
-                              xs: '1fr',
-                              sm: 'repeat(auto-fit, minmax(150px, 1fr))'
-                            },
-                            gap: 1,
-                            overflowX: "auto",
-                            "& > *": {
-                              borderRadius: 1,
-                              maxHeight: "200px",
-                              width: "100%",
-                              objectFit: "contain"
-                            }
+                            display: "flex",
+                            flexDirection: { xs: "column", sm: "row" },
+                            flexWrap: "wrap",
+                            gap: 2,
+                            justifyContent: "center",
+                            alignItems: "flex-start"
                           }}>
                             {items.map((it, i) =>
                               it.type === "image" ? (
@@ -230,9 +223,10 @@ export default function Gallery() {
                                   alt="" 
                                   style={{ 
                                     borderRadius: 8, 
-                                    maxHeight: "200px", 
-                                    width: "auto", 
+                                    maxHeight: "400px", 
                                     maxWidth: "100%",
+                                    width: "auto",
+                                    height: "auto",
                                     objectFit: "contain",
                                     display: "block"
                                   }} 
@@ -244,9 +238,10 @@ export default function Gallery() {
                                   controls 
                                   style={{ 
                                     borderRadius: 8, 
-                                    maxHeight: "200px", 
-                                    width: "auto", 
+                                    maxHeight: "400px", 
                                     maxWidth: "100%",
+                                    width: "auto",
+                                    height: "auto",
                                     objectFit: "contain",
                                     display: "block"
                                   }} 
