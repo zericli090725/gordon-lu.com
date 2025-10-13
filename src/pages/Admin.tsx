@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Typography, Box, Button, Alert, Card, CardContent, CardActions, Chip, Divider, Modal, IconButton } from '@mui/material';
+import { Container, Typography, Box, Button, Alert, Card, CardContent, CardActions, Chip, Divider, Modal, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 
 type Msg = { id:number; name:string; email:string; message:string; created_at:string };
@@ -8,6 +8,7 @@ export default function Admin() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [err, setErr] = useState<string|null>(null);
   const [selectedMessage, setSelectedMessage] = useState<Msg | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<Msg | null>(null);
 
   const token = localStorage.getItem('admin.token') || '';
 
@@ -33,9 +34,15 @@ export default function Admin() {
       });
       if (!res.ok) throw new Error('Delete failed');
       await load();
+      setDeleteConfirm(null);
     } catch (e:any) {
       alert(e.message || 'Delete failed');
     }
+  };
+
+  const handleDeleteClick = (message: Msg, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDeleteConfirm(message);
   };
 
   useEffect(() => { load(); }, []);
@@ -195,10 +202,7 @@ export default function Admin() {
                 size="small" 
                 color="error" 
                 variant="outlined"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  delMsg(m.id);
-                }}
+                onClick={(e) => handleDeleteClick(m, e)}
                 sx={{
                   borderColor: '#d32f2f',
                   fontSize: { xs: '0.75rem', sm: '0.875rem' },
@@ -329,8 +333,7 @@ export default function Admin() {
               variant="outlined"
               onClick={() => {
                 if (selectedMessage) {
-                  delMsg(selectedMessage.id);
-                  setSelectedMessage(null);
+                  setDeleteConfirm(selectedMessage);
                 }
               }}
               sx={{
@@ -346,6 +349,55 @@ export default function Admin() {
           </Box>
         </Box>
       </Modal>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={!!deleteConfirm}
+        onClose={() => setDeleteConfirm(null)}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">
+          Confirm Delete
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            Are you sure you want to delete this message from <strong>{deleteConfirm?.name}</strong>?
+            <br />
+            <br />
+            <strong>Email:</strong> {deleteConfirm?.email}
+            <br />
+            <strong>Date:</strong> {deleteConfirm ? new Date(deleteConfirm.created_at).toLocaleDateString() : ''}
+            <br />
+            <br />
+            This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={() => setDeleteConfirm(null)}
+            color="primary"
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={() => {
+              if (deleteConfirm) {
+                delMsg(deleteConfirm.id);
+                if (selectedMessage?.id === deleteConfirm.id) {
+                  setSelectedMessage(null);
+                }
+              }
+            }}
+            color="error"
+            variant="contained"
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
