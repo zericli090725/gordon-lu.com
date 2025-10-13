@@ -95,13 +95,25 @@ export default function Admin() {
             }}
           >
             <CardContent sx={{ flexGrow: 1, pb: 1 }}>
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 0.5 }}>
-                  {m.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                  {m.email}
-                </Typography>
+              <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', mb: 2 }}>
+                <Box>
+                  <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    {m.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    {m.email}
+                  </Typography>
+                </Box>
+                <Chip 
+                  label={new Date(m.created_at).toLocaleDateString()} 
+                  size="small" 
+                  variant="outlined"
+                  sx={{ 
+                    borderColor: '#8a8a8a',
+                    color: '#8a8a8a',
+                    fontSize: '0.75rem'
+                  }}
+                />
               </Box>
               
               <Divider sx={{ mb: 2, borderColor: '#8a8a8a' }} />
@@ -118,17 +130,7 @@ export default function Admin() {
               </Typography>
             </CardContent>
             
-            <CardActions sx={{ justifyContent: 'space-between', alignItems: 'center', px: 2, pb: 2 }}>
-              <Chip 
-                label={new Date(m.created_at).toLocaleDateString()} 
-                size="small" 
-                variant="outlined"
-                sx={{ 
-                  borderColor: '#8a8a8a',
-                  color: '#8a8a8a',
-                  fontSize: '0.75rem'
-                }}
-              />
+            <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
               <Button 
                 size="small" 
                 color="error" 
