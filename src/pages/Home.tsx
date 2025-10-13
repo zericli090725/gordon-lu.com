@@ -19,7 +19,7 @@ function Home() {
         }}>
           <Card 
             sx={{ 
-              maxWidth: { xs: '100%', sm: '400px', md: '500px' },
+              maxWidth: { xs: '280px', sm: '320px', md: '360px', lg: '400px' },
               width: '100%',
               borderRadius: 2,
               boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
@@ -33,7 +33,8 @@ function Home() {
               sx={{
                 width: '100%',
                 height: 'auto',
-                objectFit: 'cover'
+                objectFit: 'cover',
+                maxHeight: { xs: '200px', sm: '240px', md: '280px', lg: '320px' }
               }}
             />
           </Card>
