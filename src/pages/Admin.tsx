@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Container, Typography, Box, Button, Alert, Card, CardContent, CardActions, Chip, Divider } from '@mui/material';
+import { Container, Typography, Box, Button, Alert, Card, CardContent, CardActions, Chip, Divider, Modal, IconButton } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 
 type Msg = { id:number; name:string; email:string; message:string; created_at:string };
 
 export default function Admin() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [err, setErr] = useState<string|null>(null);
+  const [selectedMessage, setSelectedMessage] = useState<Msg | null>(null);
 
   const token = localStorage.getItem('admin.token') || '';
 
@@ -97,14 +99,22 @@ export default function Admin() {
               }
             }}
           >
-            <CardContent sx={{ flexGrow: 1, pb: 1, px: { xs: 1.5, sm: 2 } }}>
+            <CardContent sx={{ 
+              flexGrow: 1, 
+              pb: 1, 
+              px: { xs: 1.5, sm: 2 },
+              display: 'flex',
+              flexDirection: 'column',
+              maxHeight: '250px'
+            }}>
               <Box sx={{ 
                 display:'flex', 
                 justifyContent:'space-between', 
                 alignItems:'flex-start', 
                 mb: 2,
                 flexDirection: { xs: 'column', sm: 'row' },
-                gap: { xs: 1, sm: 0 }
+                gap: { xs: 1, sm: 0 },
+                flexShrink: 0
               }}>
                 <Box sx={{ flexGrow: 1 }}>
                   <Typography 
@@ -143,19 +153,31 @@ export default function Admin() {
                 />
               </Box>
               
-              <Divider sx={{ mb: 2, borderColor: '#8a8a8a' }} />
+              <Divider sx={{ mb: 2, borderColor: '#8a8a8a', flexShrink: 0 }} />
               
-              <Typography 
-                variant="body2" 
-                sx={{ 
-                  whiteSpace:'pre-wrap',
-                  lineHeight: 1.6,
-                  color: 'text.primary',
-                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
-                }}
+              <Box sx={{ 
+                flexGrow: 1,
+                overflow: 'auto',
+                minHeight: 0,
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.02)'
+                }
+              }}
+              onClick={() => setSelectedMessage(m)}
               >
-                {m.message}
-              </Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    whiteSpace:'pre-wrap',
+                    lineHeight: 1.6,
+                    color: 'text.primary',
+                    fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                  }}
+                >
+                  {m.message}
+                </Typography>
+              </Box>
             </CardContent>
             
             <CardActions sx={{ 
@@ -196,6 +218,126 @@ export default function Admin() {
           </Typography>
         </Box>
       )}
+
+      {/* Modal for viewing full message */}
+      <Modal
+        open={!!selectedMessage}
+        onClose={() => setSelectedMessage(null)}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 2
+        }}
+      >
+        <Box
+          sx={{
+            position: 'relative',
+            width: { xs: '95%', sm: '80%', md: '60%', lg: '50%' },
+            maxWidth: '600px',
+            maxHeight: '80vh',
+            bgcolor: 'background.paper',
+            borderRadius: 2,
+            boxShadow: 24,
+            outline: 'none',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          {/* Header */}
+          <Box sx={{
+            p: 3,
+            pb: 2,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            flexShrink: 0
+          }}>
+            <Box sx={{ flexGrow: 1, pr: 2 }}>
+              <Typography variant="h5" component="h2" sx={{ fontWeight: 600, mb: 1 }}>
+                {selectedMessage?.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                {selectedMessage?.email}
+              </Typography>
+              <Chip 
+                label={selectedMessage ? new Date(selectedMessage.created_at).toLocaleDateString() : ''} 
+                size="small" 
+                variant="outlined"
+                sx={{ 
+                  borderColor: '#8a8a8a',
+                  color: '#8a8a8a',
+                  fontSize: '0.75rem'
+                }}
+              />
+            </Box>
+            <IconButton
+              onClick={() => setSelectedMessage(null)}
+              sx={{
+                color: 'text.secondary',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                }
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+
+          {/* Message Content */}
+          <Box sx={{
+            p: 3,
+            flexGrow: 1,
+            overflow: 'auto',
+            minHeight: 0
+          }}>
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                whiteSpace: 'pre-wrap',
+                lineHeight: 1.7,
+                color: 'text.primary',
+                fontSize: '1rem'
+              }}
+            >
+              {selectedMessage?.message}
+            </Typography>
+          </Box>
+
+          {/* Actions */}
+          <Box sx={{
+            p: 3,
+            pt: 2,
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexShrink: 0
+          }}>
+            <Button 
+              color="error" 
+              variant="outlined"
+              onClick={() => {
+                if (selectedMessage) {
+                  delMsg(selectedMessage.id);
+                  setSelectedMessage(null);
+                }
+              }}
+              sx={{
+                borderColor: '#d32f2f',
+                '&:hover': {
+                  borderColor: '#b71c1c',
+                  backgroundColor: 'rgba(211, 47, 47, 0.04)'
+                }
+              }}
+            >
+              Delete Message
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
 }
