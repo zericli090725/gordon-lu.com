@@ -156,16 +156,15 @@ export default function Gallery() {
 
       {!loading && !err && (
         <Box sx={{ 
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 3,
-          '@media (min-width: 600px)': {
-            display: 'grid',
-            gridTemplateColumns: cards.some(c => content[c.id]) ? 'repeat(1, 1fr)' : 'repeat(2, 1fr)',
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)',
+            lg: 'repeat(4, 1fr)'
           },
-          '@media (min-width: 900px)': {
-            gridTemplateColumns: cards.some(c => content[c.id]) ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-          }
+          gap: 3,
+          width: '100%'
         }}>
           {cards.length === 0 ? (
             <Box sx={{ textAlign: "center", py: 4 }}>
@@ -181,8 +180,17 @@ export default function Gallery() {
               const items = content[card.id] || null;
               return (
                 <Box key={card.id}>
-                  <Card>
-                    <CardContent>
+                  <Card variant="outlined" sx={{ 
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: 2
+                    }
+                  }}>
+                    <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                       <Typography variant="h6">{card.title}</Typography>
                       <Typography variant="body2" color="text.secondary">{card.summary}</Typography>
 
@@ -195,25 +203,52 @@ export default function Gallery() {
                       )}
 
                       {items && (
-                        <Box sx={{ mt: 2 }}>
+                        <Box sx={{ mt: 2, flexGrow: 1 }}>
                           <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
                             <Button size="small" onClick={() => clearToken(card.id)}>Lock</Button>
                           </Box>
                           <Box sx={{ 
-                            display: "flex", 
-                            flexDirection: { xs: "column", sm: "row" },
+                            display: "grid",
+                            gridTemplateColumns: {
+                              xs: '1fr',
+                              sm: 'repeat(auto-fit, minmax(150px, 1fr))'
+                            },
                             gap: 1,
                             overflowX: "auto",
                             "& > *": {
-                              minWidth: { xs: "100%", sm: "200px" },
-                              maxWidth: { xs: "100%", sm: "300px" }
+                              borderRadius: 1,
+                              maxHeight: "200px",
+                              width: "100%",
+                              objectFit: "cover"
                             }
                           }}>
                             {items.map((it, i) =>
                               it.type === "image" ? (
-                                <img key={i} src={it.url} alt="" style={{ borderRadius: 8, maxHeight: "300px", width: "auto" }} />
+                                <img 
+                                  key={i} 
+                                  src={it.url} 
+                                  alt="" 
+                                  style={{ 
+                                    borderRadius: 8, 
+                                    maxHeight: "200px", 
+                                    width: "100%", 
+                                    objectFit: "cover",
+                                    display: "block"
+                                  }} 
+                                />
                               ) : (
-                                <video key={i} src={it.url} controls style={{ borderRadius: 8, maxHeight: "300px", width: "auto" }} />
+                                <video 
+                                  key={i} 
+                                  src={it.url} 
+                                  controls 
+                                  style={{ 
+                                    borderRadius: 8, 
+                                    maxHeight: "200px", 
+                                    width: "100%", 
+                                    objectFit: "cover",
+                                    display: "block"
+                                  }} 
+                                />
                               )
                             )}
                           </Box>
