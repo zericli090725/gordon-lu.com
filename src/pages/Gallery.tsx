@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import {
   Container, Box, Typography, Card, CardContent,
   Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField,
-  CircularProgress, Alert
+  CircularProgress, Alert, Modal, IconButton
 } from "@mui/material";
+import { Close as CloseIcon } from '@mui/icons-material';
 
 type CardBrief = {
   id: number;
@@ -29,6 +30,9 @@ export default function Gallery() {
 
   // loaded content per card
   const [content, setContent] = useState<Record<number, ContentItem[]>>({});
+  
+  // modal state
+  const [selectedCard, setSelectedCard] = useState<CardBrief | null>(null);
 
   // --- helpers ---
   const tokenKey = (id: number) => `gallery.token.${id}`;
@@ -109,6 +113,8 @@ export default function Gallery() {
       await loadContent(card.id, token);
       setOpenId(null);
       setPassword("");
+      // Open modal after successful unlock
+      setSelectedCard(card);
     } catch (e: any) {
       setUnlockErr(e.message || "Unlock failed");
     } finally {
@@ -123,6 +129,13 @@ export default function Gallery() {
       delete copy[id];
       return copy;
     });
+  };
+
+  const handleModalClose = () => {
+    if (selectedCard) {
+      clearToken(selectedCard.id);
+      setSelectedCard(null);
+    }
   };
 
   // --- UI ---
@@ -181,15 +194,18 @@ export default function Gallery() {
               return (
                 <Box key={card.id}>
                   <Card variant="outlined" sx={{ 
-                    height: '100%',
+                    height: '400px',
                     display: 'flex',
                     flexDirection: 'column',
                     transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    cursor: items ? 'pointer' : 'default',
                     '&:hover': {
                       transform: 'translateY(-2px)',
                       boxShadow: 2
                     }
-                  }}>
+                  }}
+                  onClick={() => items && setSelectedCard(card)}
+                  >
                     <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                       <Typography variant="h6">{card.title}</Typography>
                       <Typography variant="body2" color="text.secondary">{card.summary}</Typography>
@@ -203,50 +219,39 @@ export default function Gallery() {
                       )}
 
                       {items && (
-                        <Box sx={{ mt: 2, flexGrow: 1 }}>
+                        <Box sx={{ mt: 2, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                           <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
-                            <Button size="small" onClick={() => clearToken(card.id)}>Lock</Button>
+                            <Button size="small" onClick={(e) => {
+                              e.stopPropagation();
+                              clearToken(card.id);
+                            }}>Lock</Button>
                           </Box>
                           <Box sx={{ 
+                            flexGrow: 1,
                             display: "flex",
-                            flexDirection: { xs: "column", sm: "row" },
-                            flexWrap: "wrap",
-                            gap: 2,
                             justifyContent: "center",
-                            alignItems: "flex-start"
+                            alignItems: "center",
+                            overflow: "hidden"
                           }}>
-                            {items.map((it, i) =>
-                              it.type === "image" ? (
-                                <img 
-                                  key={i} 
-                                  src={it.url} 
-                                  alt="" 
-                                  style={{ 
-                                    borderRadius: 8, 
-                                    maxHeight: "400px", 
-                                    maxWidth: "100%",
-                                    width: "auto",
-                                    height: "auto",
-                                    objectFit: "contain",
-                                    display: "block"
-                                  }} 
-                                />
-                              ) : (
-                                <video 
-                                  key={i} 
-                                  src={it.url} 
-                                  controls 
-                                  style={{ 
-                                    borderRadius: 8, 
-                                    maxHeight: "400px", 
-                                    maxWidth: "100%",
-                                    width: "auto",
-                                    height: "auto",
-                                    objectFit: "contain",
-                                    display: "block"
-                                  }} 
-                                />
-                              )
+                            {items.length > 0 && (
+                              <img 
+                                src={items[0].url} 
+                                alt="" 
+                                style={{ 
+                                  borderRadius: 8, 
+                                  maxHeight: "200px", 
+                                  maxWidth: "100%",
+                                  width: "auto",
+                                  height: "auto",
+                                  objectFit: "contain",
+                                  display: "block"
+                                }} 
+                              />
+                            )}
+                            {items.length > 1 && (
+                              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                                +{items.length - 1} more
+                              </Typography>
                             )}
                           </Box>
                         </Box>
