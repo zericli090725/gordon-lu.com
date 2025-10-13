@@ -98,7 +98,7 @@ export default function Admin() {
             key={m.id}
             variant="outlined"
             sx={{ 
-              height: '100%',
+              height: '320px',
               display: 'flex',
               flexDirection: 'column',
               borderColor: '#8a8a8a',
@@ -119,7 +119,7 @@ export default function Admin() {
               px: { xs: 1.5, sm: 2 },
               display: 'flex',
               flexDirection: 'column',
-              maxHeight: '250px'
+              minHeight: 0
             }}>
               <Box sx={{ 
                 display:'flex', 
