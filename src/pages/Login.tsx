@@ -3,6 +3,7 @@ import {
   Container, Paper, TextField, Button, Typography, Box, Alert, CircularProgress
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,8 +27,8 @@ function Login() {
         throw new Error(j.error || `HTTP ${res.status}`);
       }
       const { token } = await res.json();
-      localStorage.setItem('admin.token', token);  // <-- store admin token
-      navigate('/admin');                          // create /admin page next
+      login(token);  // Use auth context to store token and update state
+      navigate('/admin');
     } catch (e:any) {
       setError(e.message || 'Login failed');
     } finally {

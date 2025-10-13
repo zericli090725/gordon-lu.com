@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Container, Typography, Box, Paper, Button, Alert } from '@mui/material';
+import { useAuth } from '../contexts/AuthContext';
 
 type Msg = { id:number; name:string; email:string; message:string; created_at:string };
 
 export default function Admin() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [err, setErr] = useState<string|null>(null);
+  const { logout } = useAuth();
 
   const token = localStorage.getItem('admin.token') || '';
 
@@ -44,7 +46,7 @@ export default function Admin() {
         <Typography variant="h4">Messages</Typography>
         <Box>
           <Button onClick={load} sx={{ mr:1 }} variant="outlined">Refresh</Button>
-          <Button color="inherit" variant="outlined" onClick={()=>{ localStorage.removeItem('admin.token'); window.location.href='/login'; }}>
+          <Button color="inherit" variant="outlined" onClick={()=>{ logout(); window.location.href='/login'; }}>
             Logout
           </Button>
         </Box>

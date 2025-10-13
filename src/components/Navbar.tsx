@@ -4,21 +4,27 @@ import HomeIcon from '@mui/icons-material/Home';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import LoginIcon from '@mui/icons-material/Login';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import MenuIcon from '@mui/icons-material/Menu';
 import iconImage from '../assets/icon.png';
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 function Navbar() {
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const navItems = [
     { label: 'Home', path: '/', icon: <HomeIcon /> },
     { label: 'Gallery', path: '/gallery', icon: <CollectionsIcon /> },
     { label: 'Contact', path: '/contact', icon: <ContactMailIcon /> },
-    { label: 'Login', path: '/login', icon: <LoginIcon /> }
+    ...(isAuthenticated 
+      ? [{ label: 'Dashboard', path: '/admin', icon: <DashboardIcon /> }]
+      : [{ label: 'Login', path: '/login', icon: <LoginIcon /> }]
+    )
   ];
 
   const handleDrawerToggle = () => {
