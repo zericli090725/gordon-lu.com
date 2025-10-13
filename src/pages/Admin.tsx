@@ -53,10 +53,13 @@ export default function Admin() {
 
   return (
     <Container maxWidth="lg" sx={{ my: 4 }}>
-      <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', mb:3 }}>
+      <Box sx={{ textAlign: 'center', mb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom>
           Messages
         </Typography>
+      </Box>
+      
+      <Box sx={{ display:'flex', justifyContent:'flex-end', mb:3 }}>
         <Button 
           onClick={load} 
           variant="outlined" 
