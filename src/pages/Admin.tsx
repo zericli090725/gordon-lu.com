@@ -101,7 +101,7 @@ export default function Admin() {
             key={m.id}
             variant="outlined"
             sx={{ 
-              height: '320px',
+              height: '280px',
               display: 'flex',
               flexDirection: 'column',
               borderColor: '#8a8a8a',
@@ -187,7 +187,7 @@ export default function Admin() {
                     color: 'text.primary',
                     fontSize: { xs: '0.8rem', sm: '0.875rem' },
                     display: '-webkit-box',
-                    WebkitLineClamp: 6,
+                    WebkitLineClamp: 4,
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
