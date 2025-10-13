@@ -93,11 +93,14 @@ export default function Admin() {
               borderColor: '#8a8a8a',
               borderRadius: 2,
               transition: 'all 0.2s ease-in-out',
+              cursor: 'pointer',
               '&:hover': {
                 boxShadow: '0 4px 12px rgba(138, 138, 138, 0.15)',
-                transform: 'translateY(-2px)'
+                transform: 'translateY(-2px)',
+                backgroundColor: 'rgba(0, 0, 0, 0.02)'
               }
             }}
+            onClick={() => setSelectedMessage(m)}
           >
             <CardContent sx={{ 
               flexGrow: 1, 
@@ -157,22 +160,24 @@ export default function Admin() {
               
               <Box sx={{ 
                 flexGrow: 1,
-                overflow: 'auto',
+                overflow: 'hidden',
                 minHeight: 0,
-                cursor: 'pointer',
-                '&:hover': {
-                  backgroundColor: 'rgba(0, 0, 0, 0.02)'
-                }
-              }}
-              onClick={() => setSelectedMessage(m)}
-              >
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
                 <Typography 
                   variant="body2" 
                   sx={{ 
                     whiteSpace:'pre-wrap',
                     lineHeight: 1.6,
                     color: 'text.primary',
-                    fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                    fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                    display: '-webkit-box',
+                    WebkitLineClamp: 6,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    flexGrow: 1
                   }}
                 >
                   {m.message}
@@ -190,7 +195,10 @@ export default function Admin() {
                 size="small" 
                 color="error" 
                 variant="outlined"
-                onClick={()=>delMsg(m.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  delMsg(m.id);
+                }}
                 sx={{
                   borderColor: '#d32f2f',
                   fontSize: { xs: '0.75rem', sm: '0.875rem' },
