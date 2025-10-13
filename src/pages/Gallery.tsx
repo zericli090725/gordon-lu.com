@@ -194,7 +194,7 @@ export default function Gallery() {
               return (
                 <Box key={card.id}>
                   <Card variant="outlined" sx={{ 
-                    height: '400px',
+                    height: '280px',
                     display: 'flex',
                     flexDirection: 'column',
                     transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
