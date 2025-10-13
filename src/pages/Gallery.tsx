@@ -37,11 +37,21 @@ export default function Gallery() {
     setLoading(true);
     setErr(null);
     try {
+      console.log('Loading gallery cards...');
       const res = await fetch("/api/gallery");
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      console.log('Gallery API response:', res.status, res.statusText);
+      
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Gallery API error:', errorText);
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+      
       const data = await res.json();
+      console.log('Gallery data received:', data);
       setCards(data.cards || []);
     } catch (e: any) {
+      console.error('Gallery load error:', e);
       setErr(e.message || "Failed to load gallery.");
     } finally {
       setLoading(false);
@@ -134,89 +144,111 @@ export default function Gallery() {
         </Box>
       )}
 
-      {!loading && err && <Alert severity="error" sx={{ mb: 3 }}>{err}</Alert>}
+      {!loading && err && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {err}
+          <br />
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            If this persists, please check your internet connection or try refreshing the page.
+          </Typography>
+        </Alert>
+      )}
 
       {!loading && !err && (
         <Box sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: { 
-            xs: '1fr', 
-            sm: cards.some(c => content[c.id]) ? 'repeat(1, 1fr)' : 'repeat(2, 1fr)', 
-            md: cards.some(c => content[c.id]) ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)' 
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          '@media (min-width: 600px)': {
+            display: 'grid',
+            gridTemplateColumns: cards.some(c => content[c.id]) ? 'repeat(1, 1fr)' : 'repeat(2, 1fr)',
           },
-          gap: 3 
+          '@media (min-width: 900px)': {
+            gridTemplateColumns: cards.some(c => content[c.id]) ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+          }
         }}>
-          {cards.map(card => {
-            const items = content[card.id] || null;
-            return (
-              <Box key={card.id}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6">{card.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">{card.summary}</Typography>
+          {cards.length === 0 ? (
+            <Box sx={{ textAlign: "center", py: 4 }}>
+              <Typography variant="h6" color="text.secondary">
+                No gallery cards available
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                Please check back later or contact the administrator.
+              </Typography>
+            </Box>
+          ) : (
+            cards.map(card => {
+              const items = content[card.id] || null;
+              return (
+                <Box key={card.id}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6">{card.title}</Typography>
+                      <Typography variant="body2" color="text.secondary">{card.summary}</Typography>
 
-                    {!items && (
-                      <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-                        <Button variant="contained" color="inherit" onClick={() => startUnlock(card.id)}>
-                          Unlock
-                        </Button>
-                      </Box>
-                    )}
-
-                    {items && (
-                      <Box sx={{ mt: 2 }}>
-                        <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
-                          <Button size="small" onClick={() => clearToken(card.id)}>Lock</Button>
+                      {!items && (
+                        <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+                          <Button variant="contained" color="inherit" onClick={() => startUnlock(card.id)}>
+                            Unlock
+                          </Button>
                         </Box>
-                        <Box sx={{ 
-                          display: "flex", 
-                          flexDirection: { xs: "column", sm: "row" },
-                          gap: 1,
-                          overflowX: "auto",
-                          "& > *": {
-                            minWidth: { xs: "100%", sm: "200px" },
-                            maxWidth: { xs: "100%", sm: "300px" }
-                          }
-                        }}>
-                          {items.map((it, i) =>
-                            it.type === "image" ? (
-                              <img key={i} src={it.url} alt="" style={{ borderRadius: 8, maxHeight: "300px", width: "auto" }} />
-                            ) : (
-                              <video key={i} src={it.url} controls style={{ borderRadius: 8, maxHeight: "300px", width: "auto" }} />
-                            )
-                          )}
-                        </Box>
-                      </Box>
-                    )}
-                  </CardContent>
-                </Card>
+                      )}
 
-                {/* Password dialog */}
-                <Dialog open={openId === card.id} onClose={() => setOpenId(null)}>
-                  <DialogTitle>Enter password</DialogTitle>
-                  <DialogContent>
-                    <TextField
-                      autoFocus
-                      fullWidth
-                      type="password"
-                      label="Password"
-                      margin="dense"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && handleUnlock(card)}
-                    />
-                    {unlockErr && <Alert severity="error" sx={{ mt: 1 }}>{unlockErr}</Alert>}
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={() => setOpenId(null)}>Cancel</Button>
-                    <Button onClick={() => handleUnlock(card)} variant="contained" color="inherit" disabled={busy}>
-                      {busy ? "Checking..." : "Unlock"}
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </Box>
-            );
-          })}
+                      {items && (
+                        <Box sx={{ mt: 2 }}>
+                          <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+                            <Button size="small" onClick={() => clearToken(card.id)}>Lock</Button>
+                          </Box>
+                          <Box sx={{ 
+                            display: "flex", 
+                            flexDirection: { xs: "column", sm: "row" },
+                            gap: 1,
+                            overflowX: "auto",
+                            "& > *": {
+                              minWidth: { xs: "100%", sm: "200px" },
+                              maxWidth: { xs: "100%", sm: "300px" }
+                            }
+                          }}>
+                            {items.map((it, i) =>
+                              it.type === "image" ? (
+                                <img key={i} src={it.url} alt="" style={{ borderRadius: 8, maxHeight: "300px", width: "auto" }} />
+                              ) : (
+                                <video key={i} src={it.url} controls style={{ borderRadius: 8, maxHeight: "300px", width: "auto" }} />
+                              )
+                            )}
+                          </Box>
+                        </Box>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Password dialog */}
+                  <Dialog open={openId === card.id} onClose={() => setOpenId(null)}>
+                    <DialogTitle>Enter password</DialogTitle>
+                    <DialogContent>
+                      <TextField
+                        autoFocus
+                        fullWidth
+                        type="password"
+                        label="Password"
+                        margin="dense"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleUnlock(card)}
+                      />
+                      {unlockErr && <Alert severity="error" sx={{ mt: 1 }}>{unlockErr}</Alert>}
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={() => setOpenId(null)}>Cancel</Button>
+                      <Button onClick={() => handleUnlock(card)} variant="contained" color="inherit" disabled={busy}>
+                        {busy ? "Checking..." : "Unlock"}
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </Box>
+              );
+            })
+          )}
         </Box>
       )}
     </Container>
