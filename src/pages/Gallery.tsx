@@ -194,14 +194,18 @@ export default function Gallery() {
               return (
                 <Box key={card.id}>
                   <Card variant="outlined" sx={{ 
-                    height: '280px',
+                    height: '250px',
                     display: 'flex',
                     flexDirection: 'column',
-                    transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    borderColor: '#8a8a8a',
+                    borderRadius: 2,
+                    transition: 'all 0.2s ease-in-out',
                     cursor: items ? 'pointer' : 'default',
+                    position: 'relative',
                     '&:hover': {
+                      boxShadow: '0 4px 12px rgba(138, 138, 138, 0.15)',
                       transform: 'translateY(-2px)',
-                      boxShadow: 2
+                      backgroundColor: 'rgba(0, 0, 0, 0.02)'
                     }
                   }}
                   onClick={() => items && setSelectedCard(card)}
@@ -211,20 +215,52 @@ export default function Gallery() {
                       <Typography variant="body2" color="text.secondary">{card.summary}</Typography>
 
                       {!items && (
-                        <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-                          <Button variant="contained" color="inherit" onClick={() => startUnlock(card.id)}>
-                            Unlock
-                          </Button>
-                        </Box>
+                        <Button 
+                          variant="outlined" 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            startUnlock(card.id);
+                          }}
+                          sx={{
+                            position: 'absolute',
+                            bottom: 16,
+                            right: 16,
+                            zIndex: 1,
+                            borderColor: '#8a8a8a',
+                            color: '#8a8a8a',
+                            '&:hover': {
+                              borderColor: '#6a6a6a',
+                              backgroundColor: 'rgba(138, 138, 138, 0.04)'
+                            }
+                          }}
+                        >
+                          Unlock
+                        </Button>
                       )}
 
                       {items && (
                         <Box sx={{ mt: 2, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                           <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
-                            <Button size="small" onClick={(e) => {
-                              e.stopPropagation();
-                              clearToken(card.id);
-                            }}>Lock</Button>
+                            <Button 
+                              size="small" 
+                              variant="outlined"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                clearToken(card.id);
+                              }}
+                              sx={{
+                                borderColor: '#8a8a8a',
+                                color: '#8a8a8a',
+                                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                                minWidth: { xs: '60px', sm: 'auto' },
+                                '&:hover': {
+                                  borderColor: '#6a6a6a',
+                                  backgroundColor: 'rgba(138, 138, 138, 0.04)'
+                                }
+                              }}
+                            >
+                              Lock
+                            </Button>
                           </Box>
                           <Box sx={{ 
                             flexGrow: 1,
