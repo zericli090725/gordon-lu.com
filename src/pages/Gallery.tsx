@@ -219,7 +219,7 @@ export default function Gallery() {
                               borderRadius: 1,
                               maxHeight: "200px",
                               width: "100%",
-                              objectFit: "cover"
+                              objectFit: "contain"
                             }
                           }}>
                             {items.map((it, i) =>
@@ -231,8 +231,9 @@ export default function Gallery() {
                                   style={{ 
                                     borderRadius: 8, 
                                     maxHeight: "200px", 
-                                    width: "100%", 
-                                    objectFit: "cover",
+                                    width: "auto", 
+                                    maxWidth: "100%",
+                                    objectFit: "contain",
                                     display: "block"
                                   }} 
                                 />
@@ -244,8 +245,9 @@ export default function Gallery() {
                                   style={{ 
                                     borderRadius: 8, 
                                     maxHeight: "200px", 
-                                    width: "100%", 
-                                    objectFit: "cover",
+                                    width: "auto", 
+                                    maxWidth: "100%",
+                                    objectFit: "contain",
                                     display: "block"
                                   }} 
                                 />
