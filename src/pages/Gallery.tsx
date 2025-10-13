@@ -283,6 +283,121 @@ export default function Gallery() {
           )}
         </Box>
       )}
+
+      {/* Gallery Modal */}
+      <Modal
+        open={!!selectedCard}
+        onClose={handleModalClose}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 2
+        }}
+      >
+        <Box
+          sx={{
+            position: 'relative',
+            width: { xs: '95%', sm: '90%', md: '80%', lg: '70%' },
+            maxWidth: '1200px',
+            maxHeight: '90vh',
+            bgcolor: 'background.paper',
+            borderRadius: 2,
+            boxShadow: 24,
+            outline: 'none',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          {/* Header */}
+          <Box sx={{
+            p: 3,
+            pb: 2,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexShrink: 0
+          }}>
+            <Typography variant="h4" component="h2" sx={{ fontWeight: 600 }}>
+              {selectedCard?.title}
+            </Typography>
+            <IconButton
+              onClick={handleModalClose}
+              sx={{
+                color: 'text.secondary',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                }
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+
+          {/* Content */}
+          <Box sx={{
+            p: 3,
+            flexGrow: 1,
+            overflow: 'auto',
+            minHeight: 0
+          }}>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+              {selectedCard?.summary}
+            </Typography>
+            
+            {selectedCard && content[selectedCard.id] && (
+              <Box sx={{ 
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  sm: 'repeat(2, 1fr)',
+                  md: 'repeat(3, 1fr)',
+                  lg: 'repeat(4, 1fr)'
+                },
+                gap: 2,
+                justifyContent: "center",
+                alignItems: "flex-start"
+              }}>
+                {content[selectedCard.id].map((item, i) =>
+                  item.type === "image" ? (
+                    <img 
+                      key={i} 
+                      src={item.url} 
+                      alt="" 
+                      style={{ 
+                        borderRadius: 8, 
+                        maxHeight: "300px", 
+                        maxWidth: "100%",
+                        width: "auto",
+                        height: "auto",
+                        objectFit: "contain",
+                        display: "block"
+                      }} 
+                    />
+                  ) : (
+                    <video 
+                      key={i} 
+                      src={item.url} 
+                      controls 
+                      style={{ 
+                        borderRadius: 8, 
+                        maxHeight: "300px", 
+                        maxWidth: "100%",
+                        width: "auto",
+                        height: "auto",
+                        objectFit: "contain",
+                        display: "block"
+                      }} 
+                    />
+                  )
+                )}
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
 }
