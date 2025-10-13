@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Typography, Box, Paper, Button, Alert } from '@mui/material';
+import { Container, Typography, Box, Button, Alert, Card, CardContent, CardActions, Chip, Divider } from '@mui/material';
 
 type Msg = { id:number; name:string; email:string; message:string; created_at:string };
 
@@ -39,25 +39,128 @@ export default function Admin() {
   useEffect(() => { load(); }, []);
 
   return (
-    <Container maxWidth="md" sx={{ my: 5 }}>
-      <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', mb:2 }}>
-        <Typography variant="h4">Messages</Typography>
-        <Button onClick={load} variant="outlined">Refresh</Button>
+    <Container maxWidth="lg" sx={{ my: 4 }}>
+      <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', mb:3 }}>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
+          Messages
+        </Typography>
+        <Button 
+          onClick={load} 
+          variant="outlined" 
+          sx={{ 
+            borderColor: '#8a8a8a',
+            color: '#8a8a8a',
+            '&:hover': {
+              borderColor: '#6a6a6a',
+              backgroundColor: 'rgba(138, 138, 138, 0.04)'
+            }
+          }}
+        >
+          Refresh
+        </Button>
       </Box>
-      {err && <Alert severity="error" sx={{ mb:2 }}>{err}</Alert>}
-      {messages.map(m => (
-        <Paper key={m.id} sx={{ p:2, mb:2 }}>
-          <Box sx={{ display:'flex', justifyContent:'space-between' }}>
-            <Typography variant="subtitle1"><b>{m.name}</b> &lt;{m.email}&gt;</Typography>
-            <Typography variant="caption" color="text.secondary">{m.created_at}</Typography>
-          </Box>
-          <Typography sx={{ whiteSpace:'pre-wrap', mt:1 }}>{m.message}</Typography>
-          <Box sx={{ textAlign:'right', mt:1 }}>
-            <Button size="small" color="error" onClick={()=>delMsg(m.id)}>Delete</Button>
-          </Box>
-        </Paper>
-      ))}
-      {messages.length === 0 && !err && <Typography color="text.secondary">No messages yet.</Typography>}
+      
+      {err && (
+        <Alert severity="error" sx={{ mb:3, borderRadius: 2 }}>
+          {err}
+        </Alert>
+      )}
+      
+      <Box 
+        sx={{ 
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)'
+          },
+          gap: 3
+        }}
+      >
+        {messages.map(m => (
+          <Card 
+            key={m.id}
+            variant="outlined"
+            sx={{ 
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              borderColor: '#8a8a8a',
+              borderRadius: 2,
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 4px 12px rgba(138, 138, 138, 0.15)',
+                transform: 'translateY(-2px)'
+              }
+            }}
+          >
+            <CardContent sx={{ flexGrow: 1, pb: 1 }}>
+              <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', mb: 2 }}>
+                <Box>
+                  <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    {m.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    {m.email}
+                  </Typography>
+                </Box>
+                <Chip 
+                  label={new Date(m.created_at).toLocaleDateString()} 
+                  size="small" 
+                  variant="outlined"
+                  sx={{ 
+                    borderColor: '#8a8a8a',
+                    color: '#8a8a8a',
+                    fontSize: '0.75rem'
+                  }}
+                />
+              </Box>
+              
+              <Divider sx={{ mb: 2, borderColor: '#8a8a8a' }} />
+              
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  whiteSpace:'pre-wrap',
+                  lineHeight: 1.6,
+                  color: 'text.primary'
+                }}
+              >
+                {m.message}
+              </Typography>
+            </CardContent>
+            
+            <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
+              <Button 
+                size="small" 
+                color="error" 
+                variant="outlined"
+                onClick={()=>delMsg(m.id)}
+                sx={{
+                  borderColor: '#d32f2f',
+                  '&:hover': {
+                    borderColor: '#b71c1c',
+                    backgroundColor: 'rgba(211, 47, 47, 0.04)'
+                  }
+                }}
+              >
+                Delete
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
+      </Box>
+      
+      {messages.length === 0 && !err && (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+            No messages yet
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Messages from the contact form will appear here
+          </Typography>
+        </Box>
+      )}
     </Container>
   );
 }
