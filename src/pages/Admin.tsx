@@ -45,6 +45,10 @@ export default function Admin() {
     setDeleteConfirm(message);
   };
 
+  const handleCancelDelete = () => {
+    setDeleteConfirm(null);
+  };
+
   useEffect(() => { load(); }, []);
 
   return (
@@ -353,19 +357,29 @@ export default function Admin() {
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={!!deleteConfirm}
-        onClose={() => setDeleteConfirm(null)}
+        onClose={handleCancelDelete}
         aria-labelledby="delete-dialog-title"
         aria-describedby="delete-dialog-description"
+        TransitionProps={{
+          onExited: () => {
+            // Small delay to ensure smooth transition
+            setTimeout(() => {
+              if (!deleteConfirm) {
+                setDeleteConfirm(null);
+              }
+            }, 100);
+          }
+        }}
       >
         <DialogTitle id="delete-dialog-title">
           Confirm Delete
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-dialog-description">
-            Are you sure you want to delete this message from <strong>{deleteConfirm?.name}</strong>?
+            Are you sure you want to delete this message from <strong>{deleteConfirm?.name || ''}</strong>?
             <br />
             <br />
-            <strong>Email:</strong> {deleteConfirm?.email}
+            <strong>Email:</strong> {deleteConfirm?.email || ''}
             <br />
             <strong>Date:</strong> {deleteConfirm ? new Date(deleteConfirm.created_at).toLocaleDateString() : ''}
             <br />
@@ -375,9 +389,16 @@ export default function Admin() {
         </DialogContent>
         <DialogActions>
           <Button 
-            onClick={() => setDeleteConfirm(null)}
-            color="primary"
+            onClick={handleCancelDelete}
             variant="outlined"
+            sx={{
+              borderColor: '#8a8a8a',
+              color: '#8a8a8a',
+              '&:hover': {
+                borderColor: '#6a6a6a',
+                backgroundColor: 'rgba(138, 138, 138, 0.04)'
+              }
+            }}
           >
             Cancel
           </Button>
