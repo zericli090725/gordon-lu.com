@@ -101,7 +101,7 @@ export default function Admin() {
             key={m.id}
             variant="outlined"
             sx={{ 
-              height: '200px',
+              height: '250px',
               display: 'flex',
               flexDirection: 'column',
               borderColor: '#8a8a8a',
