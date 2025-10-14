@@ -187,7 +187,7 @@ export default function Admin() {
                     color: 'text.primary',
                     fontSize: { xs: '0.8rem', sm: '0.875rem' },
                     display: '-webkit-box',
-                    WebkitLineClamp: 3,
+                    WebkitLineClamp: 4,
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
